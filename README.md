@@ -11,11 +11,11 @@
                             \_/\_/ |_|\__|_| |_| |____/|_|     |_| |_|       
                                                                                                         
 
-[demo](http://editor.diki.io)
+[Demo](http://editor.diki.io)
 -----------------------------
 
-Inspired from Sublime Text and SSH plugin, TePe is a humble attempt to create a browser-based code editor 
-together with a SFTP connection. It was developed just to be a bridge between your browser and server, using ACE through SFTP on node , which makes server code extremely simple (without no DB code)
+Inspired by Sublime Text and SSH plugin, TePe is a humble attempt to create a browser-based code editor 
+together with a SFTP connection. It was developed just to be a bridge between your browser and server, using ACE through SFTP on node , which makes server code extremely simple (without any DB code)
 
 Many thanks to https://github.com/ajaxorg/ace (this project would not exist without it) 
 and https://github.com/mscdex/ssh2 (for doing heavy work on server)
@@ -40,15 +40,15 @@ Technology
 
 ##Features
 
-- view folders/files on your remote server
+- View folders & files on your remote server
 - edit,delete files and create new ones
 - delete/create folders on your remote server
 - a nice autocomplete (thanks to https://github.com/ajaxorg/ace/pull/1189)
 
 ##Usage
 
-Self hosting is strongly adviced, still you can start a SFTP connection and start to use from http://editor.diki.io. 
-Promise nothing kept about your connection and session,
+Self hosting is strongly advised, however you can still start an SFTP connection and start to use the program from http://editor.diki.io. 
+We promise nothing is kept about your connection and session,
 
 ##TODO
 
