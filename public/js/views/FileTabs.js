@@ -3,26 +3,19 @@ define([
   'underscore',
   'backbone'
 ], function($, _, Backbone) {
-
     var FileTabs = Backbone.View.extend({
         el: '#editor-tabs'
         , events : {
             'click .tab-link'       : 'openTab'
             , 'click .close-tab'    : 'closeTab'
-        }
-        , initialize : function() {
+        }, initialize : function() {
             _.bindAll(this, 'openTab', 'removeTab', 'closeTab');
             this.openTabs = new (Backbone.Collection.extend({}))();
             this.sessions = new (Backbone.Collection.extend({}))();
             this.on('add', this.addTab, this);
-        }
-        , addTab : function(fileModel) {
+        }, addTab : function(fileModel) {
             console.log('adding', fileModel);
-            var id = fileModel.id
-                , fileName = fileModel.name
-                , location = fileModel.location
-                , self = this;
-
+            var id = fileModel.id, fileName = fileModel.name, location = fileModel.location, self = this;
             //flag indicating a file is opened
             //note that this flag should be set to true at opening
             env.noFile = false;
@@ -36,16 +29,13 @@ define([
                 $.ajax({
                     type : 'POST'
                     , url : '/sftp/read'
-                    , data : {
-                        fileName: location
-                    }
+                    , data : {fileName: location}
                     , dataType: "text"
                     , success : function(value) {
                         //create new EditSession with new undoManager
                         var session = new EditSession(value, modelist.getModeForPath(fileName));
                         session.setUndoManager(new UndoManager);
                         session.setMode(mode.mode);
-
                         //on change event of session compare values
                         //and put * charachter to filename
                         //TODO: throttle here
@@ -68,13 +58,11 @@ define([
                         self.renderTab(fileModel);
                     }
                 });
-            } else {
+            }else {
                 window.env.editor.setSession(this.sessions.get(id).get('session'));
                 this.renderTab(fileModel);
             }
-            
-        }
-        , renderTab : function(fileModel) {
+        }, renderTab : function(fileModel) {
             var id = fileModel.id
                 , fileName = fileModel.name
                 , location = fileModel.location
@@ -88,14 +76,12 @@ define([
                     '<span class="close-tab tab-file-close" style="float:right; font-weight:bold;">x</span>'+
                     '</li>'); 
                 this.$el.append(li);               
-            } else {
+            }else {
                 $('li', this.el).removeClass('active');
                 $('#' + id + '_tab').addClass('active');
-            }
-            this.$el.addClass('filled');
+            }this.$el.addClass('filled');
             this.setActiveTab(id, true);
-        }
-        , openTab : function(e) {
+        }, openTab : function(e) {
             // if($(e.target).is('span')) {
             //     this.removeTab()
             // }
@@ -109,14 +95,12 @@ define([
 
             console.log(fileId);
             this.setActiveTab(fileId, false);
-        }
-        //set session (it should be already in sessions collection)
+        }//set session (it should be already in sessions collection)
         , setActiveTab : function(fileId, moveCursor) {
             var session = this.sessions.get(fileId).get('session');
             window.env.editor.setSession(session);
             this.focusSession(moveCursor);
-        }
-        //remove tab after click "x"
+        }//remove tab after click "x"
         , closeTab : function (e) {
             e.stopPropagation();
             var self = this;
@@ -128,45 +112,37 @@ define([
                     if (confirm("Are you sure you want to close without saving?") ) {
                         if (confirm("Save your work before leaving?") ) {
                             // code here for save then leave (Yes)
-                        } else {
+                        }else {
                             //code here for no save but leave (No)
                             s.get("session").setValue(s.get("value"));
-                        }
-                        self.removeTab();                            
-                    } else {
-                        return;
-                    }                    
-                } else {
+                        }self.removeTab();                            
+                    }else {return;}                    
+                }else {
                     self.removeTab(id, $(e.target));                    
                 }
             }
-        }
-        , removeTab : function(id, target) {
+        }, removeTab : function(id, target) {
             var m = this.openTabs.get(id);
             this.openTabs.remove(m);
             //if it is active
-            if(target.parent().hasClass('active')) {
-                //if no tab remained
+            if(target.parent().hasClass('active')) {//if no tab remained
                 if($('.tab-link', self.el).length <= 1) {
                     window.env.editor.setSession(env.defaultSession);
                     this.focusSession();
                     env.noFile = true;
-                } else {
-                    //set previous tab active if exist
+                }else {//set previous tab active if exist
                     if(target.parent().prev().length > 0) {
                         var fid = target.parent().prev().attr('id').split('_')[0];
                         target.parent().prev().addClass('active');
                         this.setActiveTab(fid);
-                    } else if(target.parent().next().length > 0) {
+                    }else if(target.parent().next().length > 0) {
                         var fid = target.parent().next().attr('id').split('_')[0];
                         target.parent().next().addClass('active');
                         this.setActiveTab(fid);                        
                     }
                 }
-            }
-            target.parent().remove(); 
-        }
-        , focusSession : function (moveCursor) {
+            }target.parent().remove(); 
+        }, focusSession : function (moveCursor) {
             window.env.editor.focus();
             var session = env.editor.session;
             count = session.getLength();
@@ -179,9 +155,6 @@ define([
             el.parent().prev().show();
             this.showFileRecursive(el.parent());
         }
-
     });
-  
     return FileTabs;
-  
 });
